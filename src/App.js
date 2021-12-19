@@ -117,13 +117,43 @@ function App() {
         <div className='score'>Score: {score}</div>
       </header>
       <main className='main'>
-        <div className='canvas'>
-          {paintings.map((elem) => {
-            return (
-              <CardItem key={elem.id} data={elem} touchTheCard={touchTheCard} />
-            );
-          })}
-        </div>
+        {isGameOver ? (
+          <div>
+            <div>Game Over</div>
+            <button
+              onClick={() => {
+                setScore(0);
+                setPaintings((prev) => {
+                  return prev.map((elem) => {
+                    elem.touched = false;
+                    return elem;
+                  });
+                });
+                setPaintings((prev) => {
+                  return prev
+                    .map((value) => ({ value, sort: Math.random() }))
+                    .sort((a, b) => a.sort - b.sort)
+                    .map(({ value }) => value);
+                });
+                setIsGameOver(false);
+              }}
+            >
+              Restart
+            </button>
+          </div>
+        ) : (
+          <div className='canvas'>
+            {paintings.map((elem) => {
+              return (
+                <CardItem
+                  key={elem.id}
+                  data={elem}
+                  touchTheCard={touchTheCard}
+                />
+              );
+            })}
+          </div>
+        )}
       </main>
       <footer className='footer'>
         <div>Made by AZ</div>
